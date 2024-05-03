@@ -38,7 +38,6 @@ jobs:
             - uses: dorny/paths-filter@v3
               id: changes
               with:
-                token: ${{ github.token }}
                 filters: |
                     node:
                         - 'node/**'
