@@ -14,10 +14,13 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+           
             - name: Read Config
               id: config
               run: |
-                  cd ./${{ inputs.proj-path}}
+                  cd ./${{ inputs.proj-path }}
                   {
                     echo 'CONFIG_JSON<<EOF'
                     cat ./.pipeline/config.json
