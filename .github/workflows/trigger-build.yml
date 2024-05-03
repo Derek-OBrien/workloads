@@ -23,9 +23,10 @@ jobs:
             node2: ${{ steps.changes.outputs.node2 }}
             java: ${{ steps.changes.outputs.java }}
             python: ${{ steps.changes.outputs.python }}
+
         steps:
-            # - name: Checkout repository
-            #   uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
             #   with:
             #     ref: ${{ github.ref }}
             #     fetch-depth: 2
@@ -37,6 +38,7 @@ jobs:
             - uses: dorny/paths-filter@v3
               id: changes
               with:
+                token: ${{ github.token }}
                 filters: |
                     node:
                         - 'node/**'
