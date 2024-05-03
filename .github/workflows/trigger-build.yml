@@ -1,26 +1,30 @@
-name: Trigger Build for Application
+name: Trigger CI Build 
 
-on:
-    workflow_dispatch:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+on: [push, pull_request]
 
 jobs:
     changes:
+        if: |
+          (
+            (github.event_name == 'push' &&  github.ref_name == 'main') ||
+            (github.event_name == 'pull_request')
+          )
         name: Get Changes
         runs-on: ubuntu-latest
         permissions: 
             pull-requests: read
+        # Set job outputs to values from filter step
         outputs:
             node: ${{ steps.changes.outputs.node }}
             node2: ${{ steps.changes.outputs.node2 }}
             java: ${{ steps.changes.outputs.java }}
             python: ${{ steps.changes.outputs.python }}
         steps:
-            # - name: Checkout repository
-            #   uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                ref: ${{ github.ref }}
+                fetch-depth: 2
 
             - name: Get previous commit SHA
               id: prev_commit
@@ -43,7 +47,13 @@ jobs:
     build-node:
         name: Build For Node 
         needs: changes
-        if: ${{ needs.changes.outputs.node == 'true' }}
+        if: |
+          (
+            (github.event_name == 'push' &&  github.ref_name == 'main') ||
+            (github.event_name == 'pull_request')
+          ) && (
+            ${{ needs.changes.outputs.node == 'true' }}
+          )
         uses: ./.github/workflows/build-node.yaml
         with:
             proj-path: node
@@ -51,7 +61,13 @@ jobs:
     build-node2:
         name: Build For Node 2
         needs: changes
-        if: ${{ needs.changes.outputs.node2 == 'true' }}
+        if: |
+          (
+            (github.event_name == 'push' &&  github.ref_name == 'main') ||
+            (github.event_name == 'pull_request')
+          ) && (
+            ${{ needs.changes.outputs.node2 == 'true' }}
+          )
         uses: ./.github/workflows/build-node.yaml
         with:
             proj-path: node2
@@ -59,7 +75,13 @@ jobs:
     build-java:
         name: Build For Java
         needs: changes
-        if: ${{ needs.changes.outputs.java == 'true' }}
+        if: |
+          (
+            (github.event_name == 'push' &&  github.ref_name == 'main') ||
+            (github.event_name == 'pull_request')
+          ) && (
+            ${{ needs.changes.outputs.java == 'true' }}
+          )
         uses: ./.github/workflows/build-java.yaml
         with:
             proj-path: java
@@ -67,7 +89,13 @@ jobs:
     build-python:
         name: Build For Python
         needs: changes
-        if: ${{ needs.changes.outputs.python == 'true' }}
+        if: |
+          (
+            (github.event_name == 'push' &&  github.ref_name == 'main') ||
+            (github.event_name == 'pull_request')
+          ) && (
+            ${{ needs.changes.outputs.python == 'true' }}
+          )
         uses: ./.github/workflows/build-python.yaml
         with:
             proj-path: python
