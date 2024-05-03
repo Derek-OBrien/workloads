@@ -21,21 +21,11 @@ jobs:
               id: config
               run: |
                   cd ./${{ inputs.proj-path }}
-                  {
-                    echo 'CONFIG_JSON<<EOF'
-                    cat ./.pipeline/config.json
-                    echo 'EOF'
-                  } >> $GITHUB_ENV
+                  echo "config<<EOF" >> $GITHUB_OUTPUT
+                  cat ./.pipeline/config.json >> $GITHUB_OUTPUT
+                  echo "EOF">> $GITHUB_OUTPUT
 
             - name: Print Value
               run: |
-                echo '${{ fromJson(env.CONFIG_JSON) }}'
-                echo '${{ fromJson(env.CONFIG_JSON).name }}'
-
-           
-            - name: Run build cmd
-              run: |
-                echo "Path :: ${{ inputs.proj-path }}" 
-                echo "Working Dir : ${{ github.workspace }}" 
-                cd ./${{ inputs.proj-path}}
-                npm install
+                echo '${{ fromJson(steps.config.outputs.config) }}'
+                echo '${{ fromJson(steps.config.outputs.config).name }}'
