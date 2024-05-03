@@ -1,0 +1,32 @@
+name: Read Config
+
+on:
+    workflow_call:
+      inputs:
+        proj-path:
+          required: true
+          type: string
+
+
+jobs:
+    build:
+        name: Read Config
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Read Config
+              id: config
+              run: |
+                  echo 'CONFIG_JSON<<EOF' >> $GITHUB_ENV
+                  cat ./${{ inputs.proj-path }}.pipeline/config.json >> $GITHUB_ENV
+                  echo 'EOF' >> $GITHUB_ENV
+            - name: Print Value
+              run: |
+                echo '${{ fromJson(env.CONFIG_JSON).name }}'
+           
+            - name: Run build cmd
+              run: |
+                echo "Path :: ${{ inputs.proj-path }}" 
+                echo "Working Dir : ${{ github.workspace }}" 
+                cd ./${{ inputs.proj-path}}
+                npm install
