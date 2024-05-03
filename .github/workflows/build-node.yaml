@@ -10,7 +10,7 @@ on:
 
 jobs:
     build:
-        name: Build Api
+        name: Build Node Api
         runs-on: ubuntu-latest
 
         steps:

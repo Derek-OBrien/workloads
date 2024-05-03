@@ -2,13 +2,53 @@ name: Trigger Build for Application
 
 on:
     workflow_dispatch:
-    push:
-        branches: [main]
+    # push:
+    #     branches: [main]
     pull_request:
         branches: [main]
 
 jobs:
+    changes:
+        name: Get Changes
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: read
+        outputs:
+            node: ${{ steps.changes.outputs.node }}
+            node2: ${{ steps.changes.outputs.node2 }}
+            java: ${{ steps.changes.outputs.java }}
+        steps:
+            - uses: dorny/paths-filter@v3
+              id: changes
+              with:
+                filters: |
+                    node:
+                        - 'node/**'
+                    node2:
+                        - 'node2/**'
+                    java:
+                        - 'java/**'
+
     build-node:
+        name: Build For Node 
+        needs: changes
+        if: ${{ needs.changes.outputs.node }}
         uses: ./.github/workflows/build-node.yaml
         with:
             proj-path: node
+
+    build-node2:
+        name: Build For Node 2
+        needs: changes
+        if: ${{ needs.changes.outputs.node2 }}
+        uses: ./.github/workflows/build-node.yaml
+        with:
+            proj-path: node2
+    
+    build-java:
+        name: Build For Java
+        needs: changes
+        if: ${{ needs.changes.outputs.java }}
+        uses: ./.github/workflows/build-java.yml
+        with:
+            proj-path: java
