@@ -2,8 +2,8 @@ name: Trigger Build for Application
 
 on:
     workflow_dispatch:
-    # push:
-    #     branches: [main]
+    push:
+        branches: [main]
     pull_request:
         branches: [main]
 
@@ -17,6 +17,7 @@ jobs:
             node: ${{ steps.changes.outputs.node }}
             node2: ${{ steps.changes.outputs.node2 }}
             java: ${{ steps.changes.outputs.java }}
+            python: ${{ steps.changes.outputs.python }}
         steps:
             - uses: dorny/paths-filter@v3
               id: changes
@@ -28,11 +29,13 @@ jobs:
                         - 'node2/**'
                     java:
                         - 'java/**'
+                    python:
+                        - 'python/**'
 
     build-node:
         name: Build For Node 
         needs: changes
-        if: ${{ needs.changes.outputs.node }}
+        if: ${{ needs.changes.outputs.node == 'true' }}
         uses: ./.github/workflows/build-node.yaml
         with:
             proj-path: node
@@ -40,7 +43,7 @@ jobs:
     build-node2:
         name: Build For Node 2
         needs: changes
-        if: ${{ needs.changes.outputs.node2 }}
+        if: ${{ needs.changes.outputs.node2 == 'true' }}
         uses: ./.github/workflows/build-node.yaml
         with:
             proj-path: node2
@@ -48,7 +51,15 @@ jobs:
     build-java:
         name: Build For Java
         needs: changes
-        if: ${{ needs.changes.outputs.java }}
-        uses: ./.github/workflows/build-java.yml
+        if: ${{ needs.changes.outputs.java == 'true' }}
+        uses: ./.github/workflows/build-java.yaml
         with:
             proj-path: java
+
+    build-python:
+        name: Build For Python
+        needs: changes
+        if: ${{ needs.changes.outputs.python == 'true' }}
+        uses: ./.github/workflows/build-python.yaml
+        with:
+            proj-path: python

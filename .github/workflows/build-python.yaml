@@ -1,15 +1,11 @@
 name: Build Python Application
 
 on:
-    workflow_dispatch:
-    push:
-        branches: [main]
-        paths:
-            - "python/**"
-    pull_request:
-        branches: [main]
-        paths:
-            - "python/**"
+  workflow_call:
+    inputs:
+      proj-path:
+        required: true
+        type: string
 jobs:
     build:
         name: Build Api
@@ -21,5 +17,5 @@ jobs:
 
             - name: Run build cmd
               run: |
-                cd ./python
+                cd ./${{ inputs.proj-path}}
                 pip install -r requirements.txt
