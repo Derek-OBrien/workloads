@@ -11,17 +11,28 @@ jobs:
     changes:
         name: Get Changes
         runs-on: ubuntu-latest
-        permissions: read-all
-        #     pull-requests: read
+        permissions: 
+            pull-requests: read
         outputs:
             node: ${{ steps.changes.outputs.node }}
             node2: ${{ steps.changes.outputs.node2 }}
             java: ${{ steps.changes.outputs.java }}
             python: ${{ steps.changes.outputs.python }}
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                ref: ${{ github.ref }}
+                fetch-depth: 2
+
+            - name: Get previous commit SHA
+              id: prev_commit
+              run: echo "PREV_COMMIT_SHA=$(git rev-parse HEAD~1)" >> $GITHUB_ENV
+
             - uses: dorny/paths-filter@v3
               id: changes
               with:
+                base: ${{ env.PREV_COMMIT_SHA }}
                 filters: |
                     node:
                         - 'node/**'
