@@ -1,0 +1,31 @@
+name: Read Config
+
+on:
+    workflow_call:
+      inputs:
+        proj-path:
+          required: true
+          type: string
+
+
+jobs:
+    build:
+        name: Read Config
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+           
+            - name: Read Config
+              id: read-json
+              working-directory: ./${{ inputs.proj-path }}
+              run: |
+                echo "config<<EOF" >> $GITHUB_OUTPUT
+                cat ./pipeline/config.json >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Print Value
+              run: |
+                echo '${{ fromJson(steps.read-json.outputs.config) }}'
+                echo '${{ fromJson(steps.read-json.outputs.config).name }}'
