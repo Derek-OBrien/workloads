@@ -1,0 +1,25 @@
+name: Build Node Application
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [main]
+        paths:
+            - "node/**"
+    pull_request:
+        branches: [main]
+        paths:
+            - "node/**"
+jobs:
+    build:
+        name: Build Api
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Run build cmd
+              run: |
+                cd ./node
+                npm install
