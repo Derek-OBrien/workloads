@@ -17,12 +17,18 @@ jobs:
             - name: Read Config
               id: config
               run: |
-                  echo 'CONFIG_JSON<<EOF' >> $GITHUB_ENV
-                  cat ./${{ inputs.proj-path }}/.pipeline/config.json >> $GITHUB_ENV
-                  echo 'EOF' >> $GITHUB_ENV
+                  cd ./${{ inputs.proj-path}}
+                  {
+                    echo 'CONFIG_JSON<<EOF'
+                    cat ./.pipeline/config.json
+                    echo 'EOF'
+                  } >> $GITHUB_ENV
+
             - name: Print Value
               run: |
+                echo '${{ fromJson(env.CONFIG_JSON) }}'
                 echo '${{ fromJson(env.CONFIG_JSON).name }}'
+
            
             - name: Run build cmd
               run: |
