@@ -62,4 +62,4 @@ jobs:
         if: ${{ needs.changes.outputs.python == 'true' }}
         uses: ./.github/workflows/build-python.yaml
         with:
-            proj-path: java
+            proj-path: python
