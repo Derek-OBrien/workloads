@@ -1,6 +1,6 @@
 from flask import Flask, json
 
-companies = [{"id": 1, "name": "Derek"}]
+companies = [{"id": 1, "name": "Derek "}]
 
 api = Flask(__name__)
 
