@@ -4,7 +4,7 @@ const app = express();
 const port = 3001;
 
 app.get('/', (req, res) => {
-  res.send('Welcome to my server!!');
+  res.send('Welcome to my server2!!');
 });
 
 app.get('/me', (req, res) =>{
