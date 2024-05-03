@@ -11,4 +11,4 @@ jobs:
     build-node:
         uses: ./.github/workflows/build-node.yaml
         with:
-            proj-path: node2
+            proj-path: node
