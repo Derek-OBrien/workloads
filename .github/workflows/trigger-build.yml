@@ -11,8 +11,8 @@ jobs:
     changes:
         name: Get Changes
         runs-on: ubuntu-latest
-        permissions:
-            pull-requests: read
+        permissions: read-all
+        #     pull-requests: read
         outputs:
             node: ${{ steps.changes.outputs.node }}
             node2: ${{ steps.changes.outputs.node2 }}
