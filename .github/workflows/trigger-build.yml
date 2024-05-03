@@ -19,11 +19,8 @@ jobs:
             java: ${{ steps.changes.outputs.java }}
             python: ${{ steps.changes.outputs.python }}
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            #   with:
-            #     ref: ${{ github.ref }}
-            #     fetch-depth: 2
+            # - name: Checkout repository
+            #   uses: actions/checkout@v4
 
             - name: Get previous commit SHA
               id: prev_commit
