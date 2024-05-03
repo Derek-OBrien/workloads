@@ -18,7 +18,7 @@ jobs:
               id: config
               run: |
                   echo 'CONFIG_JSON<<EOF' >> $GITHUB_ENV
-                  cat ./${{ inputs.proj-path }}.pipeline/config.json >> $GITHUB_ENV
+                  cat ./${{ inputs.proj-path }}/.pipeline/config.json >> $GITHUB_ENV
                   echo 'EOF' >> $GITHUB_ENV
             - name: Print Value
               run: |
