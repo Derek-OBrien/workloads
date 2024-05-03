@@ -2,15 +2,12 @@ name: Build Node Application
 
 on:
     workflow_call:
-    workflow_dispatch:
-    push:
-        branches: [main]
-        paths:
-            - "node/**"
-    pull_request:
-        branches: [main]
-        paths:
-            - "node/**"
+      inputs:
+        proj-path:
+          required: true
+          type: string
+
+
 jobs:
     build:
         name: Build Api
@@ -22,5 +19,6 @@ jobs:
 
             - name: Run build cmd
               run: |
-                cd ./node
+                echo "Path :: ${{ inputs.proj-path }}" 
+                cd ./${{ inputs.proj-path}}
                 npm install
