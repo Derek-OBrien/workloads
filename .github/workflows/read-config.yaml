@@ -18,14 +18,14 @@ jobs:
               uses: actions/checkout@v4
            
             - name: Read Config
-              id: config
+              id: read-json
+              working-directory: ./${{ inputs.proj-path }}
               run: |
-                  cd ./${{ inputs.proj-path }}
-                  echo "config<<EOF" >> $GITHUB_OUTPUT
-                  cat ./.pipeline/config.json >> $GITHUB_OUTPUT
-                  echo "EOF">> $GITHUB_OUTPUT
+                echo "config<<EOF" >> $GITHUB_OUTPUT
+                cat ./pipeline/config.json >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
 
             - name: Print Value
               run: |
-                echo '${{ fromJson(steps.config.outputs.config) }}'
-                echo '${{ fromJson(steps.config.outputs.config).name }}'
+                echo '${{ fromJson(steps.read-json.outputs.config) }}'
+                echo '${{ fromJson(steps.read-json.outputs.config).name }}'
