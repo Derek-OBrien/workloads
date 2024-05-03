@@ -21,6 +21,6 @@ jobs:
               run: |
                 echo "Path :: ${{ inputs.proj-path }}" 
                 echo "Working Dir : ${{ github.workspace }}" 
-                cd ./${{ inputs.proj-path}}
+                cd ./${{ inputs.proj-path }}
                 echo "Working Dir : ${{ github.workspace }}" 
                 npm install
